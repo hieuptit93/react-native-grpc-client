@@ -11,11 +11,11 @@ npm install react-native-grpc-client
 ## Usage
 
 ```js
-import { multiply } from "react-native-grpc-client";
+import { startStream } from "react-native-grpc-client";
 
 // ...
 
-const result = await multiply(3, 7);
+const result = startStream('103.141.140.189', 9100);
 ```
 
 ## Contributing
