@@ -26,13 +26,6 @@ class GrpcClientModule(reactContext: ReactApplicationContext) : ReactContextBase
         return "GrpcClient"
     }
 
-    // Example method
-    // See https://reactnative.dev/docs/native-modules-android
-    @ReactMethod
-    fun multiply(a: Int, b: Int, promise: Promise) {
-      promise.resolve(a + b)
-    }
-
     @ReactMethod
     fun startStream(host: String, port: Int, promise: Promise) {
       val asyncStubSingle: StreamVoiceGrpc.StreamVoiceStub;
@@ -73,10 +66,9 @@ class GrpcClientModule(reactContext: ReactApplicationContext) : ReactContextBase
         //Định nghĩa những việc sẽ làm khi server kết thúc stream
         override fun onCompleted() {
           // Already stopAsr
-          Log.d("error", "");
+          Log.d("Done", "");
         }
       }
-      val myFile = File("word.txt")
       try {
         val request: StreamObserver<VoiceRequest> = asyncStubSingle.sendVoice(responseObserver)
         val bi = BufferedInputStream(FileInputStream(  (reactApplicationContext.getExternalFilesDir("test.wav"))))
