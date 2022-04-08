@@ -17,6 +17,7 @@ import service.VoiceRequest
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
+import java.nio.ByteBuffer
 import java.util.concurrent.TimeUnit
 
 
@@ -27,7 +28,7 @@ class GrpcClientModule(reactContext: ReactApplicationContext) : ReactContextBase
     }
 
     @ReactMethod
-    fun startStream(host: String, port: Int, promise: Promise) {
+    fun startStream(host: String, port: Int, data: ByteArray, promise: Promise) {
       val asyncStubSingle: StreamVoiceGrpc.StreamVoiceStub;
       val mChannel = ManagedChannelBuilder
         .forAddress(host, port)
@@ -71,17 +72,20 @@ class GrpcClientModule(reactContext: ReactApplicationContext) : ReactContextBase
       }
       try {
         val request: StreamObserver<VoiceRequest> = asyncStubSingle.sendVoice(responseObserver)
-        val bi = BufferedInputStream(FileInputStream(  (reactApplicationContext.getExternalFilesDir("test.wav"))))
-        val byte_buff = ByteArray(8000)
-        //dùng để khởi tạo 1 phiên ASR ở server  kèm mã xác thực và 1 mảng byte để tiết kiệm tài nguyên
-        //gửi audio đến server
-        while (bi.read(byte_buff, 0, byte_buff.size) !== -1) {
-          request.onNext(
-            VoiceRequest.newBuilder().setByteBuff(ByteString.copyFrom(byte_buff)).build()
-          )
-        }
-        bi.close()
+//        val bi = BufferedInputStream(FileInputStream(  (reactApplicationContext.getExternalFilesDir("test.wav"))))
+//        val byte_buff = ByteArray(8000)
+//        //dùng để khởi tạo 1 phiên ASR ở server  kèm mã xác thực và 1 mảng byte để tiết kiệm tài nguyên
+//        //gửi audio đến server
+//        while (bi.read(byte_buff, 0, byte_buff.size) !== -1) {
+//          request.onNext(
+//            VoiceRequest.newBuilder().setByteBuff(ByteString.copyFrom(byte_buff)).build()
+//          )
+//        }
+//        bi.close()
         //gửi thông báo hết audio cho server
+        request.onNext(
+            VoiceRequest.newBuilder().setByteBuff(ByteString.copyFrom(data)).build()
+          )
         request.onCompleted()
       } catch (e: Exception) {
         Log.d("errrr", e.toString())
