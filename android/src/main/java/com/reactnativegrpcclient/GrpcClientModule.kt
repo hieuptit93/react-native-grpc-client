@@ -28,7 +28,7 @@ class GrpcClientModule(reactContext: ReactApplicationContext) : ReactContextBase
     }
 
     @ReactMethod
-    fun startStream(host: String, port: Int, data: ByteArray, promise: Promise) {
+    fun startStream(host: String, port: Int, data: String?, promise: Promise) {
       val asyncStubSingle: StreamVoiceGrpc.StreamVoiceStub;
       val mChannel = ManagedChannelBuilder
         .forAddress(host, port)
@@ -50,7 +50,7 @@ class GrpcClientModule(reactContext: ReactApplicationContext) : ReactContextBase
           if (!textReply.hasResult()) return
           val resultFinal = textReply.result.final
           val lastResult = textReply.result.getHypotheses(0).transcript
-          Log.d("Final result:", lastResult)
+          Log.d("startStream Final result:", lastResult)
           if(resultFinal) {
             promise.resolve(lastResult)
             return
@@ -61,13 +61,13 @@ class GrpcClientModule(reactContext: ReactApplicationContext) : ReactContextBase
         //Định nghĩa các việc sẽ làm nếu server trả về lỗi nào đó
         override fun onError(throwable: Throwable) {
           // Already stopAsr
-          Log.d("error", "");
+          Log.d("startStream error", throwable.message);
         }
 
         //Định nghĩa những việc sẽ làm khi server kết thúc stream
         override fun onCompleted() {
           // Already stopAsr
-          Log.d("Done", "");
+          Log.d("startStream Done", "");
         }
       }
       try {
@@ -83,12 +83,15 @@ class GrpcClientModule(reactContext: ReactApplicationContext) : ReactContextBase
 //        }
 //        bi.close()
         //gửi thông báo hết audio cho server
+        android.util.Log.d("startStream", data)
+        val decoded = data!!.toByteArray(Charsets.UTF_16LE)
+        android.util.Log.d("startStream decoded", decoded.toString())
         request.onNext(
-            VoiceRequest.newBuilder().setByteBuff(ByteString.copyFrom(data)).build()
+            VoiceRequest.newBuilder().setByteBuff(ByteString.copyFrom(decoded)).build()
           )
         request.onCompleted()
       } catch (e: Exception) {
-        Log.d("errrr", e.toString())
+        Log.d("startStream errrr", e.toString())
       }
 //      val request = asyncStubSingle.sendVoice(responseObserver)
 //      Log.d("hieu", asyncStubSingle.toString())

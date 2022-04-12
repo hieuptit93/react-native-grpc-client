@@ -52,12 +52,16 @@ export default function App() {
     AudioRecord.on("data", data => {
       const buf = Buffer.from(data, "base64");
       const destination = new Uint16Array(buf.buffer, buf.byteOffset, buf.length / Uint16Array.BYTES_PER_ELEMENT);
-      console.log(buf)
-      startStream('103.141.140.189', 9100, destination).then((t) => {
+      console.log('data', data)
+      console.log('buf', buf)
+      startStream('103.141.140.189', 9100, data).then((t) => {
         setText(t)
       });
     });
-    AudioRecord.start();
+     AudioRecord.start();
+//    startStream('103.141.140.189', 9100, "null").then((t) => {
+//      setText(t)
+//    });
   }
 
   return (
