@@ -19,6 +19,8 @@ import java.io.File
 import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.util.concurrent.TimeUnit
+import android.util.Base64;
+import com.facebook.react.bridge.ReadableArray;
 
 
 class GrpcClientModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
@@ -47,10 +49,11 @@ class GrpcClientModule(reactContext: ReactApplicationContext) : ReactContextBase
       val responseObserver = object : StreamObserver<TextReply> {
         //Định nghĩa sẽ làm gì với TextReply asr_response trả về:
         override fun onNext(textReply: TextReply) {
-          if (!textReply.hasResult()) return
+//          if (!textReply.hasResult()) return
           val resultFinal = textReply.result.final
           val lastResult = textReply.result.getHypotheses(0).transcript
           Log.d("startStream Final result:", lastResult)
+//          Log.d("startStream Final resultFinal:", resultFinal)
           if(resultFinal) {
             promise.resolve(lastResult)
             return
@@ -83,11 +86,10 @@ class GrpcClientModule(reactContext: ReactApplicationContext) : ReactContextBase
 //        }
 //        bi.close()
         //gửi thông báo hết audio cho server
-        android.util.Log.d("startStream", data)
-        val decoded = data!!.toByteArray(Charsets.UTF_16LE)
-        android.util.Log.d("startStream decoded", decoded.toString())
+        val decodeStringBytesAudio: ByteArray = Base64.decode(data, Base64.DEFAULT)
+        val originStr = String(decodeStringBytesAudio)
         request.onNext(
-            VoiceRequest.newBuilder().setByteBuff(ByteString.copyFrom(decoded)).build()
+            VoiceRequest.newBuilder().setByteBuff(ByteString.copyFrom(originStr.toByteArray(java.nio.charset.StandardCharsets.UTF_16LE))).build()
           )
         request.onCompleted()
       } catch (e: Exception) {
