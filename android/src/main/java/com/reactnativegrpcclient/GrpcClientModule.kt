@@ -86,10 +86,10 @@ class GrpcClientModule(reactContext: ReactApplicationContext) : ReactContextBase
 //        }
 //        bi.close()
         //gửi thông báo hết audio cho server
-        val decodeStringBytesAudio: ByteArray = Base64.decode(data, Base64.DEFAULT)
+        val decodeStringBytesAudio: ByteArray = Base64.decode(data, Base64.NO_WRAP)
         val originStr = String(decodeStringBytesAudio)
         request.onNext(
-            VoiceRequest.newBuilder().setByteBuff(ByteString.copyFrom(originStr.toByteArray(java.nio.charset.StandardCharsets.UTF_16LE))).build()
+            VoiceRequest.newBuilder().setByteBuff(ByteString.copyFrom(decodeStringBytesAudio)).build()
           )
         request.onCompleted()
       } catch (e: Exception) {
