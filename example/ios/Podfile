@@ -4,18 +4,25 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '11.0'
 
 target 'GrpcClientExample' do
+#  use_modular_headers!
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
 
   pod 'react-native-grpc-client', :path => '../..'
-  pod 'SwiftGRPC'
-  # Enables Flipper.
-  #
-  # Note that if you have use_frameworks! enabled, Flipper will not work and
-  # you should disable these next few lines.
-  use_flipper!({ 'Flipper' => '0.80.0' })
-  post_install do |installer|
-    flipper_post_install(installer)
-  end
+  use_frameworks!
+#    pod 'SwiftGRPC'
+    pod 'gRPC-Swift', '~> 1.5.0' # Latest at the time of writing
+    pod 'gRPC-Swift-Plugins'
+    #  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec', :modular_headers => false
+#  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec', :modular_headers => true
+
+permissions_path = '../node_modules/react-native-permissions/ios'
+pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone"
+
+
+#  use_flipper!({ 'Flipper' => '0.95.0' })
+#  post_install do |installer|
+#    flipper_post_install(installer)
+#  end
 end

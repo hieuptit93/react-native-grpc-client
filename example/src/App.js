@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { startStream } from 'react-native-grpc-client';
-import Permissions, {openSettings} from "react-native-permissions";
+// import Permissions, {openSettings} from "react-native-permissions";
 import { useState, useEffect } from 'react';
 import AudioRecord from 'react-native-audio-record';
 import { Buffer } from 'buffer';
@@ -18,7 +18,7 @@ export default function App() {
   const [isPermission, setPermission] = useState(false);
 
   useEffect(() => {
-    checkPermission();
+    // checkPermission();
   }, [])
 
 
@@ -48,16 +48,19 @@ export default function App() {
   };
 
   const startRecord = () => {
-    AudioRecord.init(options);
-    AudioRecord.on("data", data => {
-      const buf = Buffer.from(data, "base64");
-      const destination = new Uint16Array(buf.buffer, buf.byteOffset, buf.length / Uint16Array.BYTES_PER_ELEMENT);
-      console.log(buf)
-      startStream('103.141.140.189', 9100, destination).then((t) => {
-        setText(t)
-      });
+    // AudioRecord.init(options);
+    // AudioRecord.on("data", data => {
+    //   const buf = Buffer.from(data, "base64");
+    //   const destination = new Uint16Array(buf.buffer, buf.byteOffset, buf.length / Uint16Array.BYTES_PER_ELEMENT);
+    //   console.log(buf)
+    //   startStream('103.141.140.189', 9100).then((t) => {
+    //     setText(t)
+    //   });
+    // });
+    // AudioRecord.start();
+    startStream('103.141.140.189', 9100).then((t) => {
+      setText(t)
     });
-    AudioRecord.start();
   }
 
   return (
@@ -87,7 +90,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: 'red',
+    backgroundColor: 'green',
     alignItems: 'center',
     justifyContent: 'center'
   }
