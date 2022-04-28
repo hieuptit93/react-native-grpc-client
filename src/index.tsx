@@ -1,4 +1,4 @@
-import {NativeModules, Platform} from 'react-native';
+import {NativeModules, Platform, NativeEventEmitter} from 'react-native';
 
 const LINKING_ERROR =
   `The package 'react-native-grpc-client' doesn't seem to be linked. Make sure: \n\n` +
@@ -24,3 +24,18 @@ export function multiply(a: number, b: number): Promise<number> {
 export function startStream(a: string, b: number, c: string): Promise<any> {
   return GrpcClient.startStream(a, b, c);
 }
+
+const EventEmitter = new NativeEventEmitter(GrpcClient);
+
+const eventsMap = {
+  data: 'data'
+};
+
+export const on = (event: "data", callback: (data: string) => void) => {
+  const nativeEvent = eventsMap[event];
+  if (!nativeEvent) {
+    throw new Error('Invalid event');
+  }
+  EventEmitter.removeAllListeners(nativeEvent);
+  return EventEmitter.addListener(nativeEvent, callback);
+};

@@ -33,6 +33,74 @@ class GrpcClientModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
+  fun open(host: String, port: Int) {
+    val asyncStubSingle: StreamVoiceGrpc.StreamVoiceStub;
+    val mChannel = ManagedChannelBuilder
+      .forAddress(host, port)
+      .usePlaintext()
+      .keepAliveTime(30, TimeUnit.SECONDS)
+      .keepAliveWithoutCalls(true)
+      .build()
+
+    val header1 = Metadata()
+    header1.put(Metadata.Key.of("channels", Metadata.ASCII_STRING_MARSHALLER), "1")
+    header1.put(Metadata.Key.of("rate", Metadata.ASCII_STRING_MARSHALLER), "16000")
+    header1.put(Metadata.Key.of("format", Metadata.ASCII_STRING_MARSHALLER), "S16LE")
+    header1.put(Metadata.Key.of("token", Metadata.ASCII_STRING_MARSHALLER), "stepupenglish")
+    header1.put(Metadata.Key.of("single-sentence", Metadata.ASCII_STRING_MARSHALLER), "True")
+    asyncStubSingle = MetadataUtils.attachHeaders<StreamVoiceGrpc.StreamVoiceStub>(
+      StreamVoiceGrpc.newStub(mChannel),
+      header1
+    )
+
+    try {
+      request = asyncStubSingle.sendVoice(responseObserver)
+//        val bi = BufferedInputStream(FileInputStream(  (reactApplicationContext.getExternalFilesDir("test.wav"))))
+//        val byte_buff = ByteArray(8000)
+//        //dùng để khởi tạo 1 phiên ASR ở server  kèm mã xác thực và 1 mảng byte để tiết kiệm tài nguyên
+//        //gửi audio đến server
+//        while (bi.read(byte_buff, 0, byte_buff.size) !== -1) {
+//          request.onNext(
+//            VoiceRequest.newBuilder().setByteBuff(ByteString.copyFrom(byte_buff)).build()
+//          )
+//        }
+//        bi.close()
+      val responseObserver = object : StreamObserver<TextReply> {
+        //Định nghĩa sẽ làm gì với TextReply asr_response trả về:
+        override fun onNext(textReply: TextReply) {
+//          if (!textReply.hasResult()) return
+          val resultFinal = textReply.result.final
+          val lastResult = textReply.result.getHypotheses(0).transcript
+          Log.d("startStream Final result:", lastResult)
+//          Log.d("startStream Final resultFinal:", resultFinal)
+          if (resultFinal) {
+            promise.resolve(lastResult)
+            return
+          }
+
+        }
+
+        //Định nghĩa các việc sẽ làm nếu server trả về lỗi nào đó
+        override fun onError(throwable: Throwable) {
+          // Already stopAsr
+          Log.d("startStream error", throwable.message);
+          promise.reject("streaming errrr", throwable)
+        }
+
+        //Định nghĩa những việc sẽ làm khi server kết thúc stream
+        override fun onCompleted() {
+          // Already stopAsr
+          Log.d("startStream Done", "");
+          promise.resolve(lastResult)
+        }
+      }
+    } catch (e: Exception) {
+      Log.d("startStream errrr", e.toString())
+      promise.reject("startStream errrr", e)
+    }
+  }
+
+  @ReactMethod
   fun startStream(host: String, port: Int, data: String?, promise: Promise) {
     val asyncStubSingle: StreamVoiceGrpc.StreamVoiceStub;
     val mChannel = ManagedChannelBuilder
