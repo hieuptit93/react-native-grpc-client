@@ -2,7 +2,7 @@
 
 @interface RCT_EXTERN_MODULE(GrpcClient, NSObject)
 
-RCT_EXTERN_METHOD(startStream:(int)host withB:(int)port
+RCT_EXTERN_METHOD(startStream:(NSString)host withB:(int)port
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
