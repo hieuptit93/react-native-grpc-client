@@ -18,7 +18,7 @@ export default function App() {
   const [isPermission, setPermission] = useState(false);
 
   useEffect(() => {
-    checkPermission();
+    // checkPermission();
   }, [])
 
 
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: 'red',
+    backgroundColor: 'green',
     alignItems: 'center',
     justifyContent: 'center'
   }

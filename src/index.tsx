@@ -50,6 +50,3 @@ const SttGrpc = {
 }
 
 export default SttGrpc
-
-
-
