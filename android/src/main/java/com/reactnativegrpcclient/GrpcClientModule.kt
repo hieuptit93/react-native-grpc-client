@@ -28,7 +28,7 @@ class GrpcClientModule(reactContext: ReactApplicationContext) : ReactContextBase
     }
 
     @ReactMethod
-    fun startStream(host: String, port: Int, data: ByteArray, promise: Promise) {
+    fun startStream(host: String, port: Int, promise: Promise) {
       val asyncStubSingle: StreamVoiceGrpc.StreamVoiceStub;
       val mChannel = ManagedChannelBuilder
         .forAddress(host, port)
@@ -83,9 +83,9 @@ class GrpcClientModule(reactContext: ReactApplicationContext) : ReactContextBase
 //        }
 //        bi.close()
         //gửi thông báo hết audio cho server
-        request.onNext(
-            VoiceRequest.newBuilder().setByteBuff(ByteString.copyFrom(data)).build()
-          )
+//        request.onNext(
+//            VoiceRequest.newBuilder().setByteBuff(ByteString.copyFrom('data')).build()
+//          )
         request.onCompleted()
       } catch (e: Exception) {
         Log.d("errrr", e.toString())

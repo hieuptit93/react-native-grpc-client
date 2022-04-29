@@ -17,10 +17,10 @@ const GrpcClient = NativeModules.GrpcClient
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return GrpcClient.multiply(a, b);
-}
-
 export function startStream(a: string, b: number) {
   return GrpcClient.startStream(a, b);
+}
+
+export function sendVoice(a: string) {
+  return GrpcClient.sendVoice(a);
 }

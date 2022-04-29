@@ -6,4 +6,6 @@ RCT_EXTERN_METHOD(startStream:(NSString)host withB:(int)port
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(sendVoice:(NSString *)url)
+
 @end

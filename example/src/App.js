@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { startStream } from 'react-native-grpc-client';
+import { startStream, playSound } from 'react-native-grpc-client';
 // import Permissions, {openSettings} from "react-native-permissions";
 import { useState, useEffect } from 'react';
 import AudioRecord from 'react-native-audio-record';
@@ -61,6 +61,7 @@ export default function App() {
     startStream('103.141.140.189', 9100).then((t) => {
       setText(t)
     });
+    // playSound('hieu')
   }
 
   return (
