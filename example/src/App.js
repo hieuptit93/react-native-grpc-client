@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { startStream, playSound } from 'react-native-grpc-client';
-// import Permissions, {openSettings} from "react-native-permissions";
+import {StyleSheet, View, Text, TouchableOpacity, Alert} from 'react-native';
+import SttGrpc from 'react-native-grpc-client'
+import Permissions, {openSettings} from "react-native-permissions";
 import { useState, useEffect } from 'react';
 import AudioRecord from 'react-native-audio-record';
 import { Buffer } from 'buffer';
@@ -48,20 +48,27 @@ export default function App() {
   };
 
   const startRecord = () => {
-    // AudioRecord.init(options);
-    // AudioRecord.on("data", data => {
-    //   const buf = Buffer.from(data, "base64");
-    //   const destination = new Uint16Array(buf.buffer, buf.byteOffset, buf.length / Uint16Array.BYTES_PER_ELEMENT);
-    //   console.log(buf)
-    //   startStream('103.141.140.189', 9100).then((t) => {
-    //     setText(t)
-    //   });
-    // });
-    // AudioRecord.start();
-    startStream('103.141.140.189', 9100).then((t) => {
-      setText(t)
-    });
-    // playSound('hieu')
+    SttGrpc.close()
+    SttGrpc.open('103.141.140.189', 9100)
+    SttGrpc.on('open', ()=>{
+      showAlertMsg('open')
+      AudioRecord.init(options);
+      AudioRecord.on("data", data => {
+        SttGrpc.send(data)
+      });
+      AudioRecord.start();
+    })
+    SttGrpc.on('error', (mess)=>{
+      showAlertMsg(mess)
+    })
+
+    SttGrpc.on('message', (data)=>{
+      setText(data.message)
+    })
+
+    SttGrpc.on('completed', ()=>{
+      showAlertMsg('completed')
+    })
   }
 
   return (
@@ -72,6 +79,21 @@ export default function App() {
         <Text>{'Thu âm'}</Text>
       </TouchableOpacity>
     </View>
+  );
+}
+
+const showAlertMsg = (msg) => {
+  Alert.alert(
+    'On Event',
+    msg?.toString(),
+    [
+      {
+        text: 'OK',
+        onPress: () => {
+        },
+      },
+    ],
+    {cancelable: false},
   );
 }
 
