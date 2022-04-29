@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {StyleSheet, View, Text, TouchableOpacity, Alert} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Alert, Platform } from 'react-native';
 import SttGrpc from 'react-native-grpc-client'
 import Permissions, {openSettings} from "react-native-permissions";
 import { useState, useEffect } from 'react';
@@ -49,7 +49,7 @@ export default function App() {
 
   const startRecord = () => {
     SttGrpc.close()
-    SttGrpc.open('103.141.140.189', 9100)
+    SttGrpc.open('103.141.141.13', 9001)
     SttGrpc.on('open', ()=>{
       showAlertMsg('open')
       AudioRecord.init(options);

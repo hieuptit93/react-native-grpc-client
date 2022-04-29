@@ -8,8 +8,11 @@ import React
 
 @objc(GrpcClient)
 class GrpcClient: NSObject {
-    @objc(startStream:withB:withResolver:withRejecter:)
-    func startStream(host: String, port: Int, resolve:RCTPromiseResolveBlock,reject:RCTPromiseRejectBlock) -> Void {
+    
+    public static var emitter: RCTEventEmitter!
+    
+    @objc(open:withB:)
+    func open(host: String, port: Int) -> Void {
         
         let group = PlatformSupport.makeEventLoopGroup(loopCount: 1)
         defer {
@@ -40,9 +43,6 @@ class GrpcClient: NSObject {
             greeter.defaultCallOptions.customMetadata.add(name: "single-sentence", value: "True")
             
     
-            greeter.sendVoice { _ in
-                print("finish")
-            }
             print(greeter)
         }
         catch {
@@ -50,13 +50,12 @@ class GrpcClient: NSObject {
             print(error)
         }
         
-        resolve(host)
     }
 
     
-    @objc(sendVoice:)
-    func sendVoice(url: String) {
-        print(url)
+    @objc
+    func close() {
+        print("close")
     }
 
 }
