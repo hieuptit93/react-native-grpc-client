@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { startStream } from 'react-native-grpc-client';
+import {StyleSheet, View, Text, TouchableOpacity, Alert} from 'react-native';
+import SttGrpc from 'react-native-grpc-client'
 import Permissions, {openSettings} from "react-native-permissions";
 import { useState, useEffect } from 'react';
 import AudioRecord from 'react-native-audio-record';
@@ -48,24 +48,26 @@ export default function App() {
   };
 
   const startRecord = () => {
-    AudioRecord.init(options);
-    AudioRecord.on("data", data => {
-      const buf = Buffer.from(data, "base64");
-      const destination = new Uint16Array(buf.buffer, buf.byteOffset, buf.length / Uint16Array.BYTES_PER_ELEMENT);
-      // console.log('data', data)
-      // console.log('buf.byteOffset', buf.byteOffset)
-      // console.log('buf.length', buf.length)
-      // console.log('destination', destination)
-      startStream('103.141.140.189', 9100, data).then((t) => {
-        if(t) setText(t)
-      }).catch(e=>{
-        console.log(e)
-      })
-    });
-     AudioRecord.start();
-//    startStream('103.141.140.189', 9100, "null").then((t) => {
-//      setText(t)
-//    });
+    SttGrpc.open('103.141.140.189', 9100)
+    SttGrpc.on('open', ()=>{
+      showAlertMsg('open')
+      AudioRecord.init(options);
+      AudioRecord.on("data", data => {
+        SttGrpc.send(data)
+      });
+      AudioRecord.start();
+    })
+    SttGrpc.on('error', (mess)=>{
+      showAlertMsg(mess)
+    })
+
+    SttGrpc.on('message', (data)=>{
+      setText(data.message)
+    })
+
+    SttGrpc.on('completed', ()=>{
+      showAlertMsg('completed')
+    })
   }
 
   return (
@@ -76,6 +78,21 @@ export default function App() {
         <Text>{'Thu âm'}</Text>
       </TouchableOpacity>
     </View>
+  );
+}
+
+const showAlertMsg = (msg) => {
+  Alert.alert(
+    'Đã có lỗi',
+    msg?.toString(),
+    [
+      {
+        text: 'OK',
+        onPress: () => {
+        },
+      },
+    ],
+    {cancelable: false},
   );
 }
 

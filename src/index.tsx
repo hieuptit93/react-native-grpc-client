@@ -28,14 +28,28 @@ export function startStream(a: string, b: number, c: string): Promise<any> {
 const EventEmitter = new NativeEventEmitter(GrpcClient);
 
 const eventsMap = {
-  data: 'data'
+  data: 'data',
+  open: 'open',
+  error: 'error',
+  completed: 'completed',
+  message: 'message',
 };
 
-export const on = (event: "data", callback: (data: string) => void) => {
-  const nativeEvent = eventsMap[event];
-  if (!nativeEvent) {
-    throw new Error('Invalid event');
-  }
-  EventEmitter.removeAllListeners(nativeEvent);
-  return EventEmitter.addListener(nativeEvent, callback);
-};
+const SttGrpc = {
+  open: (host: string, post: number) => GrpcClient.open(host, post),
+  close: () => GrpcClient.close(),
+  on: (event: "data", callback: (data: string) => void) => {
+    const nativeEvent = eventsMap[event];
+    if (!nativeEvent) {
+      throw new Error('Invalid event');
+    }
+    EventEmitter.removeAllListeners(nativeEvent);
+    return EventEmitter.addListener(nativeEvent, callback);
+  },
+  send: (data: string) => GrpcClient.send(data)
+}
+
+export default SttGrpc
+
+
+
