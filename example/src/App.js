@@ -48,6 +48,7 @@ export default function App() {
   };
 
   const startRecord = () => {
+    SttGrpc.close()
     SttGrpc.open('103.141.140.189', 9100)
     SttGrpc.on('open', ()=>{
       showAlertMsg('open')
@@ -83,7 +84,7 @@ export default function App() {
 
 const showAlertMsg = (msg) => {
   Alert.alert(
-    'Đã có lỗi',
+    'On Event',
     msg?.toString(),
     [
       {

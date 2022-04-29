@@ -31,7 +31,7 @@ class GrpcClientModule(private val reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
 
   lateinit var request: StreamObserver<VoiceRequest>
-  lateinit var eventEmitter: DeviceEventManagerModule.RCTDeviceEventEmitter
+  var eventEmitter: DeviceEventManagerModule.RCTDeviceEventEmitter? = null
 
   override fun getName(): String {
     return "GrpcClient"
@@ -93,22 +93,23 @@ class GrpcClientModule(private val reactContext: ReactApplicationContext) :
     }
   }
 
-  fun onOpen(){
-    eventEmitter.emit("open", null);
-  }
-  fun onCompeleted(){
-    eventEmitter.emit("completed", null);
+  fun onOpen() {
+    eventEmitter?.emit("open", null);
   }
 
-  fun onError(message: String?){
-    eventEmitter.emit("error", message);
+  fun onCompeleted() {
+    eventEmitter?.emit("completed", null);
   }
 
-  fun onMessage(data: String?, final: Boolean){
+  fun onError(message: String?) {
+    eventEmitter?.emit("error", message);
+  }
+
+  fun onMessage(data: String?, final: Boolean) {
     val params: WritableMap = Arguments.createMap()
     params.putString("message", data)
     params.putBoolean("final", final)
-    eventEmitter.emit("message", params);
+    eventEmitter?.emit("message", params);
   }
 
   @ReactMethod
@@ -126,7 +127,7 @@ class GrpcClientModule(private val reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun close(data: String?) {
+  fun close() {
     try {
       //gửi thông báo hết audio cho server
       request.onCompleted()
