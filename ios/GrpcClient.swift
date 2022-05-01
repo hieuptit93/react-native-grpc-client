@@ -44,6 +44,7 @@ class GrpcClient: NSObject {
             
     
             print(greeter)
+            
         }
         catch {
             //handle error
