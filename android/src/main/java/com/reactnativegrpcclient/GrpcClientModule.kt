@@ -25,6 +25,8 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.Arguments;
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 
 
 class GrpcClientModule(private val reactContext: ReactApplicationContext) :
@@ -32,6 +34,7 @@ class GrpcClientModule(private val reactContext: ReactApplicationContext) :
 
   lateinit var request: StreamObserver<VoiceRequest>
   var eventEmitter: DeviceEventManagerModule.RCTDeviceEventEmitter? = null
+  val gson = Gson()
 
   override fun getName(): String {
     return "GrpcClient"
@@ -64,11 +67,10 @@ class GrpcClientModule(private val reactContext: ReactApplicationContext) :
         //Định nghĩa sẽ làm gì với TextReply asr_response trả về:
         override fun onNext(textReply: TextReply) {
 //          if (!textReply.hasResult()) return
-          val resultFinal = textReply.result.final
-          val lastResult = textReply.result.getHypotheses(0).transcript
-          Log.d("startStream Final result:", lastResult)
+          val jsonString = gson.toJson(textReply)
+          Log.d("startStream Final result:", jsonString)
 //          Log.d("startStream Final resultFinal:", resultFinal)
-          onMessage(textReply.result.getHypotheses(0).transcript, resultFinal)
+          onMessage(jsonString)
         }
 
         //Định nghĩa các việc sẽ làm nếu server trả về lỗi nào đó
@@ -99,17 +101,15 @@ class GrpcClientModule(private val reactContext: ReactApplicationContext) :
 
   fun onCompeleted() {
     eventEmitter?.emit("completed", null);
+    eventEmitter = null
   }
 
   fun onError(message: String?) {
     eventEmitter?.emit("error", message);
   }
 
-  fun onMessage(data: String?, final: Boolean) {
-    val params: WritableMap = Arguments.createMap()
-    params.putString("message", data)
-    params.putBoolean("final", final)
-    eventEmitter?.emit("message", params);
+  fun onMessage(data: String?) {
+    eventEmitter?.emit("message", data);
   }
 
   @ReactMethod
