@@ -76,7 +76,7 @@ class GrpcClientModule(private val reactContext: ReactApplicationContext) :
         //Định nghĩa các việc sẽ làm nếu server trả về lỗi nào đó
         override fun onError(throwable: Throwable) {
           // Already stopAsr
-          Log.d("startStream error", throwable.message)
+          Log.d("startStream error", throwable.message?:"")
           onError(throwable.message)
         }
 
@@ -116,7 +116,6 @@ class GrpcClientModule(private val reactContext: ReactApplicationContext) :
   fun send(data: String?) {
     try {
       val decodeStringBytesAudio: ByteArray = Base64.decode(data, Base64.NO_WRAP)
-      val originStr = String(decodeStringBytesAudio)
       request.onNext(
         VoiceRequest.newBuilder().setByteBuff(ByteString.copyFrom(decodeStringBytesAudio)).build()
       )
