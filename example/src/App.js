@@ -50,27 +50,28 @@ export default function App() {
   const startRecord = () => {
     SttGrpc.close()
     SttGrpc.open('103.141.141.13', 9001)
-//    SttGrpc.on('open', ()=>{
-//      showAlertMsg('open')
-//      AudioRecord.init(options);
-//      AudioRecord.on("data", data => {
-//        SttGrpc.send(data)
-//      });
-//      AudioRecord.start();
-//    })
-//    SttGrpc.on('error', (mess)=>{
-//      showAlertMsg(mess)
-//    })
-//
-//    SttGrpc.on('message', (data)=>{
-//      const res = JSON.parse(data)
-//      console.log(JSON.stringify(res, null, 2))
-//      setText(data)
-//    })
-//
-//    SttGrpc.on('completed', ()=>{
-//      showAlertMsg('completed')
-//    })
+   SttGrpc.on('open', ()=>{
+     showAlertMsg('open')
+     AudioRecord.init(options);
+     AudioRecord.on("data", data => {
+       SttGrpc.send(data)
+     });
+     AudioRecord.start();
+   })
+   SttGrpc.on('error', (mess)=>{
+     showAlertMsg(mess)
+   })
+
+   SttGrpc.on('message', (data)=>{
+     console.log(data)
+     const res = JSON.parse(data)
+     console.log(JSON.stringify(res, null, 2))
+     setText(data)
+   })
+
+   SttGrpc.on('completed', ()=>{
+     showAlertMsg('completed')
+   })
   }
 
   return (

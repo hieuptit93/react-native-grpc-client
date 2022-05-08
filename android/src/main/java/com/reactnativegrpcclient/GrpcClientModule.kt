@@ -27,6 +27,8 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.Arguments;
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.FieldNamingStrategy
 
 
 class GrpcClientModule(private val reactContext: ReactApplicationContext) :
@@ -34,7 +36,28 @@ class GrpcClientModule(private val reactContext: ReactApplicationContext) :
 
   lateinit var request: StreamObserver<VoiceRequest>
   var eventEmitter: DeviceEventManagerModule.RCTDeviceEventEmitter? = null
-  val gson = Gson()
+  val gson = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+    .setFieldNamingStrategy { it ->
+      when (it.name) {
+        "id_" -> "id"
+        "msg_" -> "msg"
+        "result_" -> "result"
+        "hypotheses_" -> "hypotheses"
+        "confidence_" -> "confidence"
+        "likelihood_" -> "likelihood"
+        "transcriptNormedUrlencoded_" -> "transcript_normed_urlencoded"
+        "transcriptNormed_" -> "transcript_normed"
+        "transcriptUrlencoded_" -> "transcript_urlencoded"
+        "transcript_" -> "transcript"
+        "final_" -> "final"
+        "segmentStart_" -> "segment_start"
+        "segmentLength_" -> "segment_length"
+        "totalLength_" -> "total_length"
+        else -> {
+          it.name
+        }
+      }
+    }.create()
 
   override fun getName(): String {
     return "GrpcClient"
