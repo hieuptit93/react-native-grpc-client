@@ -7,13 +7,38 @@ import AVFoundation
 import React
 
 @objc(GrpcClient)
-class GrpcClient: NSObject {
-    
+open class GrpcClient: RCTEventEmitter {
     public var emitter: RCTEventEmitter!
+    override init() {
+            super.init()
+        emitter = self
+
+        }
+        
+    @objc open override func supportedEvents() -> [String]! {
+        return ["open", "error", "completed", "message", "data"]
+    }
+    
+    @objc func onOpen() {
+        
+      }
+
+     @objc func onCompeleted() {
+        
+      }
+
+      @objc func onError(message: String?) {
+          
+      }
+
+      @objc func onMessage(data: String?) {
+        
+      }
+    
+    
     
     @objc(open:withB:)
     func open(host: String, port: Int) -> Void {
-        
         
         let group = PlatformSupport.makeEventLoopGroup(loopCount: 1)
         defer {
