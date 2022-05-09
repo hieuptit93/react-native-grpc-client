@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.authors      = package["author"]
 
   s.platforms    = { :ios => "10.0" }
-#   s.source       = { :git => "https://github.com/hieuptit93/react-native-grpc-client.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/hieuptit93/react-native-grpc-client.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
 #   s.dependency 'gRPC-Swift', '~> 1.5.0'
