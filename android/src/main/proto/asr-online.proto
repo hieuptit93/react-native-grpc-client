@@ -42,4 +42,5 @@ message TextReply {
     float segment_start = 5;
     float segment_length = 6;
     float total_length = 7;
+    string audio_url = 9;
 }

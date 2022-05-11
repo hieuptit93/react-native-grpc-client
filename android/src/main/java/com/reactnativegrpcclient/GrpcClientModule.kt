@@ -53,6 +53,7 @@ class GrpcClientModule(private val reactContext: ReactApplicationContext) :
         "segmentStart_" -> "segment_start"
         "segmentLength_" -> "segment_length"
         "totalLength_" -> "total_length"
+        "audioUrl_" -> "audio_url"
         else -> {
           it.name
         }
