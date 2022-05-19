@@ -6,6 +6,8 @@
 
 RCT_EXTERN_METHOD(open:(NSString)host withB:(int)port)
 
+RCT_EXTERN_METHOD(send:(NSString)data)
+
 RCT_EXTERN_METHOD(close)
 
 @end
