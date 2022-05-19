@@ -160,5 +160,15 @@ class GrpcClientModule(private val reactContext: ReactApplicationContext) :
     }
   }
 
+  @ReactMethod
+  fun cancel() {
+    try {
+      //gửi thông báo ngắt kết nối cho server
+      request.onError(null)
+    } catch (e: Exception) {
+      Log.d("startStream errrr", e.toString())
+      onError(e.message)
+    }
+  }
 
 }

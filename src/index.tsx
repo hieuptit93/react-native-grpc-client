@@ -38,6 +38,7 @@ const eventsMap = {
 const SttGrpc = {
   open: (host: string, post: number) => GrpcClient.open(host, post),
   close: () => GrpcClient.close(),
+  cancel: () => GrpcClient.cancel(),
   on: (event: 'data', callback: (data: string) => void) => {
     const nativeEvent = eventsMap[event];
     if (!nativeEvent) {
