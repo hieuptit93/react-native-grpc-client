@@ -130,6 +130,7 @@ class GrpcClientModule(private val reactContext: ReactApplicationContext) :
 
   fun onError(message: String?) {
     eventEmitter?.emit("error", message);
+    eventEmitter = null
   }
 
   fun onMessage(data: String?) {

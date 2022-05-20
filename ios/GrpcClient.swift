@@ -22,26 +22,33 @@ public class GrpcClient: RCTEventEmitter {
     }
 
     @objc func onOpen() {
-        emitter.sendEvent(withName: "open", body: [])
+        if(isEmitting) {
+           emitter.sendEvent(withName: "open", body: [])
+        }
     }
 
     @objc func onCompeleted() {
-        emitter.sendEvent(withName: "completed", body: [])
+     if(isEmitting) {
+               emitter.sendEvent(withName: "completed", body: [])
+            }
     }
 
     @objc func onError(message: String?) {
-        emitter.sendEvent(withName: "error", body: message)
+     if(isEmitting) {
+          emitter.sendEvent(withName: "error", body: message)
+            }
     }
 
     @objc func onMessage(data: Any?) {
-        emitter.sendEvent(withName: "message", body: data)
+        if(isEmitting) {
+          emitter.sendEvent(withName: "message", body: data)
+        }
     }
 
 
 
     @objc(open:withB:)
     func open(host: String, port: Int) -> Void {
-
         let group = PlatformSupport.makeEventLoopGroup(loopCount: 1)
         defer {
             try? group.syncShutdownGracefully()
@@ -76,12 +83,7 @@ public class GrpcClient: RCTEventEmitter {
                     return
                 }
                 print("StreamingVoice_TextReply", StreamingVoice_TextReply)
-                do {
-                    let data = try self.encoder.encode(StreamingVoice_TextReply)
-                    self.onMessage(data: StreamingVoice_TextReply)
-                } catch {
-                    self.onError(message: error.localizedDescription)
-                }
+                self.onMessage(data: StreamingVoice_TextReply)
                 let resultFinal = StreamingVoice_TextReply.result.final
                 let lastResult = StreamingVoice_TextReply.result.hypotheses[0].transcript
                 print(resultFinal, lastResult)
@@ -98,7 +100,7 @@ public class GrpcClient: RCTEventEmitter {
 
     @objc
     func close() -> Void {
-//        self.callback.sendEnd()
+       self.callback.sendEnd()
     }
 
     @objc(send:)
@@ -106,7 +108,6 @@ public class GrpcClient: RCTEventEmitter {
         var voice = StreamingVoice_VoiceRequest.with { StreamingVoice_VoiceRequest in
             print("Test")
         }
-
         let data:Data = Data(base64Encoded: data, options: NSData.Base64DecodingOptions(rawValue: 0))!
         //        let data: Data = Data(base64Encoded: textSample, options: NSData.Base64DecodingOptions(rawValue: 0))!
         voice.byteBuff = data
@@ -114,20 +115,16 @@ public class GrpcClient: RCTEventEmitter {
         let event = self.callback.sendMessage(voice)
         event.whenComplete { result in
             print("complete", result)
-            self.onCompeleted()
+//             self.onCompeleted()
         }
         event.whenSuccess { success in
             print("success", success)
-
         }
         event.whenFailure { error in
             print("v", error)
             self.onError(message: error.localizedDescription)
         }
-
     }
-
-
 }
 
 
