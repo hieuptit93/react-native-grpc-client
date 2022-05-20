@@ -92,8 +92,8 @@ export default function App() {
   }
 
   const cancelRecord = ()=>{
-    AudioRecord.stop();
-    SttGrpc.cancel()
+    // AudioRecord.stop();
+    // SttGrpc.cancel()
   }
 
   const showAlertMsg = (msg) => {
@@ -123,7 +123,7 @@ export default function App() {
         <Text>{'Stop'}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={cancelRecord}>
-        <Text>{'Cacel'}</Text>
+        <Text>{'Cancel'}</Text>
       </TouchableOpacity>
     </View>
   );
