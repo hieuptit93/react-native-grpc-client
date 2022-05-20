@@ -71,13 +71,18 @@ public class GrpcClient: RCTEventEmitter {
                 "single-sentence": "True"
             ])
             let greeter = StreamingVoice_StreamVoiceClient.init(channel: mChannel, defaultCallOptions: callOptions)
-
-
             self.callback = greeter.sendVoice(callOptions: callOptions) { StreamingVoice_TextReply in
                 if StreamingVoice_TextReply.hasResult == false {
                     return
                 }
-                print(StreamingVoice_TextReply)
+                print("StreamingVoice_TextReply", StreamingVoice_TextReply)
+                self.encoder.outputFormatting = .prettyPrinted
+                do {
+                    let data = try self.encoder.encode(StreamingVoice_TextReply)
+                    self.onMessage(String(data: data, encoding: .utf8)!)
+                } catch {
+                    self.onError(message: error.localizedDescription)
+                }
                 let resultFinal = StreamingVoice_TextReply.result.final
                 let lastResult = StreamingVoice_TextReply.result.hypotheses[0].transcript
                 print(resultFinal, lastResult)
@@ -110,25 +115,11 @@ public class GrpcClient: RCTEventEmitter {
         let event = self.callback.sendMessage(voice)
         event.whenComplete { result in
             print("complete", result)
-//            do {
-//                let data = try self.encoder.encode(result)
-//                self.onMessage(String(data: data, encoding: .utf8)!)
-//            } catch {
-//                self.onError(message: error.localizedDescription)
-//            }
-            self.onMessage(data: "{\"mes\":\"whenComplete\"}")
+            self.onCompeleted()
         }
         event.whenSuccess { success in
             print("success", success)
-            self.encoder.outputFormatting = .prettyPrinted
-            self.onMessage(data: "{\"mes\":\"whenSuccess\"}")
-//            do {
-//                let data = try self.encoder.encode(success)
-//                self.onMessage(String(data: data, encoding: .utf8)!)
-//            } catch {
-//                self.onError(message: error.localizedDescription)
-//            }
-            
+
         }
         event.whenFailure { error in
             print("v", error)
