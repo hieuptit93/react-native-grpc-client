@@ -110,17 +110,29 @@ public class GrpcClient: RCTEventEmitter {
         let event = self.callback.sendMessage(voice)
         event.whenComplete { result in
             print("complete", result)
-            onCompeleted()
+//            do {
+//                let data = try self.encoder.encode(result)
+//                self.onMessage(String(data: data, encoding: .utf8)!)
+//            } catch {
+//                self.onError(message: error.localizedDescription)
+//            }
+            self.onMessage(data: "{\"mes\":\"whenComplete\"}")
         }
         event.whenSuccess { success in
             print("success", success)
-            encoder.outputFormatting = .prettyPrinted
-            let data = try encoder.encode(success)
-            onMessage(String(data: data, encoding: .utf8)!)
+            self.encoder.outputFormatting = .prettyPrinted
+            self.onMessage(data: "{\"mes\":\"whenSuccess\"}")
+//            do {
+//                let data = try self.encoder.encode(success)
+//                self.onMessage(String(data: data, encoding: .utf8)!)
+//            } catch {
+//                self.onError(message: error.localizedDescription)
+//            }
+            
         }
         event.whenFailure { error in
             print("v", error)
-            onError(error)
+            self.onError(message: error.localizedDescription)
         }
 
     }
