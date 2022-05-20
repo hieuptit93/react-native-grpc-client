@@ -12,6 +12,7 @@ public class GrpcClient: RCTEventEmitter {
     public var emitter: RCTEventEmitter!
     var callback: BidirectionalStreamingCall<StreamingVoice_VoiceRequest, StreamingVoice_TextReply>!
     public var encoder = JSONEncoder()
+    public var isEmitting = true
     override init() {
         super.init()
         emitter = self
@@ -100,7 +101,7 @@ public class GrpcClient: RCTEventEmitter {
 
     @objc
     func close() -> Void {
-       self.callback.sendEnd()
+//        self.callback.sendEnd()
     }
 
     @objc(send:)
@@ -126,5 +127,3 @@ public class GrpcClient: RCTEventEmitter {
         }
     }
 }
-
-
