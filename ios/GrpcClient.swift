@@ -84,9 +84,9 @@ public class GrpcClient: RCTEventEmitter {
                     return
                 }
                 print("StreamingVoice_TextReply", StreamingVoice_TextReply)
-                self.onMessage(data: StreamingVoice_TextReply)
                 let resultFinal = StreamingVoice_TextReply.result.final
                 let lastResult = StreamingVoice_TextReply.result.hypotheses[0].transcript
+                self.onMessage(data:StreamingVoice_TextReply.result)
                 print(resultFinal, lastResult)
 
             }
