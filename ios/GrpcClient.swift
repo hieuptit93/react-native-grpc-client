@@ -33,7 +33,7 @@ public class GrpcClient: RCTEventEmitter {
         emitter.sendEvent(withName: "error", body: message)
     }
 
-    @objc func onMessage(data: String?) {
+    @objc func onMessage(data: Any?) {
         emitter.sendEvent(withName: "message", body: data)
     }
 
@@ -76,10 +76,9 @@ public class GrpcClient: RCTEventEmitter {
                     return
                 }
                 print("StreamingVoice_TextReply", StreamingVoice_TextReply)
-                self.encoder.outputFormatting = .prettyPrinted
                 do {
                     let data = try self.encoder.encode(StreamingVoice_TextReply)
-                    self.onMessage(String(data: data, encoding: .utf8)!)
+                    self.onMessage(data: StreamingVoice_TextReply)
                 } catch {
                     self.onError(message: error.localizedDescription)
                 }
