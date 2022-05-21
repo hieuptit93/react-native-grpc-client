@@ -116,19 +116,19 @@ struct StreamingVoice_TextReply: Codable {
       var unknownFields = SwiftProtobuf.UnknownStorage()
 
       enum CodingKeys: String, CodingKey {
-                      case hypotheses = "hypotheses"
-                      case final = "final"
+                      case transcript = "transcript"
+                      case transcriptNormed = "transcript_normed"
+                      case transcriptUrlencoded = "transcript_urlencoded"
+                      case transcriptNormedUrlencoded = "transcript_normed_urlencoded"
+                      case confidence = "confidence"
+                      case likelihood = "likelihood"
       }
       init() {}
     }
     enum CodingKeys: String, CodingKey {
-                case transcript = "transcript"
-                case transcriptNormed = "transcript_normed"
-                case transcriptUrlencoded = "transcript_urlencoded"
-                case transcriptNormedUrlencoded = "transcript_normed_urlencoded"
-                case confidence = "confidence"
-                case likelihood = "likelihood"
-    }
+                          case hypotheses = "hypotheses"
+                          case final = "final"
+          }
     init() {}
   }
 
