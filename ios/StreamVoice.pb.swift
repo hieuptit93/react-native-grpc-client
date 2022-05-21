@@ -54,7 +54,8 @@ struct StreamingVoice_VoiceRequest {
   init() {}
 }
 
-struct StreamingVoice_TextReply {
+struct StreamingVoice_TextReply: Codable {
+
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -84,7 +85,7 @@ struct StreamingVoice_TextReply {
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  struct Result {
+  struct Result: Codable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -95,7 +96,7 @@ struct StreamingVoice_TextReply {
 
     var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    struct Hypothese {
+    struct Hypothese: Codable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -114,15 +115,38 @@ struct StreamingVoice_TextReply {
 
       var unknownFields = SwiftProtobuf.UnknownStorage()
 
+      enum CodingKeys: String, CodingKey {
+                      case hypotheses = "hypotheses"
+                      case final = "final"
+      }
       init() {}
     }
-
+    enum CodingKeys: String, CodingKey {
+                case transcript = "transcript"
+                case transcriptNormed = "transcript_normed"
+                case transcriptUrlencoded = "transcript_urlencoded"
+                case transcriptNormedUrlencoded = "transcript_normed_urlencoded"
+                case confidence = "confidence"
+                case likelihood = "likelihood"
+    }
     init() {}
   }
 
   init() {}
 
   fileprivate var _result: StreamingVoice_TextReply.Result? = nil
+
+   enum CodingKeys: String, CodingKey {
+            case status = "status"
+            case msg = "msg"
+            case segment = "segment"
+            case id = "id"
+            case _result = "result"
+            case segment_start = "segment_start"
+            case segment_length = "segment_length"
+            case total_length = "total_length"
+            case audio_url = "audio_url"
+   }
 }
 
 #if swift(>=5.5) && canImport(_Concurrency)
