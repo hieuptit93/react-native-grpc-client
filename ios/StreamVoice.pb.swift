@@ -85,7 +85,7 @@ struct StreamingVoice_TextReply: Encodable {
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  var audio_url: String = String()
+  var audioUrl_: String = String()
 
   struct Result: Codable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
@@ -147,7 +147,7 @@ struct StreamingVoice_TextReply: Encodable {
             case segmentStart = "segment_start"
             case segmentLength = "segment_length"
             case totalLength = "total_length"
-            case audio_url = "audio_url"
+            case audioUrl_ = "audio_url"
    }
 
    func encode(to encoder: Encoder) throws {
@@ -160,7 +160,7 @@ struct StreamingVoice_TextReply: Encodable {
            try container.encode(segmentStart, forKey: .segmentStart)
            try container.encode(segmentLength, forKey: .segmentLength)
            try container.encode(totalLength, forKey: .totalLength)
-           try container.encode(audio_url, forKey: .audio_url)
+           try container.encode(audioUrl_, forKey: .audioUrl_)
    }
 }
 
