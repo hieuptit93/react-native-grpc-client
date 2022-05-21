@@ -85,6 +85,8 @@ struct StreamingVoice_TextReply: Codable {
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
+  var audio_url: String = String()
+
   struct Result: Codable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -142,9 +144,9 @@ struct StreamingVoice_TextReply: Codable {
             case segment = "segment"
             case id = "id"
             case result
-            case segment_start = "segment_start"
-            case segment_length = "segment_length"
-            case total_length = "total_length"
+            case segmentStart = "segment_start"
+            case segmentLength = "segment_length"
+            case totalLength = "total_length"
             case audio_url = "audio_url"
    }
 
@@ -155,9 +157,9 @@ struct StreamingVoice_TextReply: Codable {
            try container.encode(segment, forKey: .segment)
            try container.encode(id, forKey: .id)
            try container.encode(result, forKey: .result)
-           try container.encode(segment_start, forKey: .segment_start)
-           try container.encode(segment_length, forKey: .segment_length)
-           try container.encode(total_length, forKey: .total_length)
+           try container.encode(segment_start, forKey: .segmentStart)
+           try container.encode(segment_length, forKey: .segmentLength)
+           try container.encode(total_length, forKey: .totalLength)
            try container.encode(audio_url, forKey: .audio_url)
    }
 }
