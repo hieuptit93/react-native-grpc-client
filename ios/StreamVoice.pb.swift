@@ -54,7 +54,7 @@ struct StreamingVoice_VoiceRequest {
   init() {}
 }
 
-struct StreamingVoice_TextReply: Codable {
+struct StreamingVoice_TextReply: Encodable {
 
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -157,9 +157,9 @@ struct StreamingVoice_TextReply: Codable {
            try container.encode(segment, forKey: .segment)
            try container.encode(id, forKey: .id)
            try container.encode(result, forKey: .result)
-           try container.encode(segment_start, forKey: .segmentStart)
-           try container.encode(segment_length, forKey: .segmentLength)
-           try container.encode(total_length, forKey: .totalLength)
+           try container.encode(segmentStart, forKey: .segment_start)
+           try container.encode(segmentLength, forKey: .segment_length)
+           try container.encode(totalLength, forKey: .total_length)
            try container.encode(audio_url, forKey: .audio_url)
    }
 }
