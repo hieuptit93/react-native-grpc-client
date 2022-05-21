@@ -141,11 +141,24 @@ struct StreamingVoice_TextReply: Codable {
             case msg = "msg"
             case segment = "segment"
             case id = "id"
-            case _result = "result"
+            case result = "result"
             case segment_start = "segment_start"
             case segment_length = "segment_length"
             case total_length = "total_length"
             case audio_url = "audio_url"
+   }
+
+   func encode(to encoder: Encoder) throws {
+           var container = encoder.container(keyedBy: CodingKeys.self)
+           try container.encode(status, forKey: .status)
+           try container.encode(msg, forKey: .msg)
+           try container.encode(segment, forKey: .segment)
+           try container.encode(id, forKey: .id)
+           try container.encode(result, forKey: .result)
+           try container.encode(segment_start, forKey: .segment_start)
+           try container.encode(segment_length, forKey: .segment_length)
+           try container.encode(total_length, forKey: .total_length)
+           try container.encode(audio_url, forKey: .audio_url)
    }
 }
 
