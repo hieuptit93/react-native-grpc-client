@@ -157,9 +157,9 @@ struct StreamingVoice_TextReply: Encodable {
            try container.encode(segment, forKey: .segment)
            try container.encode(id, forKey: .id)
            try container.encode(result, forKey: .result)
-           try container.encode(segmentStart, forKey: .segment_start)
-           try container.encode(segmentLength, forKey: .segment_length)
-           try container.encode(totalLength, forKey: .total_length)
+           try container.encode(segmentStart, forKey: .segmentStart)
+           try container.encode(segmentLength, forKey: .segmentLength)
+           try container.encode(totalLength, forKey: .totalLength)
            try container.encode(audio_url, forKey: .audio_url)
    }
 }
