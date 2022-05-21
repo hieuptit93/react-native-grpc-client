@@ -141,7 +141,7 @@ struct StreamingVoice_TextReply: Codable {
             case msg = "msg"
             case segment = "segment"
             case id = "id"
-            case result = "result"
+            case result
             case segment_start = "segment_start"
             case segment_length = "segment_length"
             case total_length = "total_length"
