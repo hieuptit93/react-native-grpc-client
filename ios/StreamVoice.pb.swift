@@ -82,6 +82,8 @@ struct StreamingVoice_TextReply: Encodable {
   var segmentLength: Float = 0
 
   var totalLength: Float = 0
+    
+  var audioURL: String = String()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -271,6 +273,7 @@ extension StreamingVoice_TextReply: SwiftProtobuf.Message, SwiftProtobuf._Messag
     5: .standard(proto: "segment_start"),
     6: .standard(proto: "segment_length"),
     7: .standard(proto: "total_length"),
+    9: .standard(proto: "audio_url"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -287,6 +290,7 @@ extension StreamingVoice_TextReply: SwiftProtobuf.Message, SwiftProtobuf._Messag
       case 6: try { try decoder.decodeSingularFloatField(value: &self.segmentLength) }()
       case 7: try { try decoder.decodeSingularFloatField(value: &self.totalLength) }()
       case 8: try { try decoder.decodeSingularStringField(value: &self.msg) }()
+      case 9: try { try decoder.decodeSingularStringField(value: &self.audioURL) }()
       default: break
       }
     }
@@ -321,6 +325,9 @@ extension StreamingVoice_TextReply: SwiftProtobuf.Message, SwiftProtobuf._Messag
     if !self.msg.isEmpty {
       try visitor.visitSingularStringField(value: self.msg, fieldNumber: 8)
     }
+    if !self.audioURL.isEmpty {
+      try visitor.visitSingularStringField(value: self.audioURL, fieldNumber: 9)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -333,6 +340,7 @@ extension StreamingVoice_TextReply: SwiftProtobuf.Message, SwiftProtobuf._Messag
     if lhs.segmentStart != rhs.segmentStart {return false}
     if lhs.segmentLength != rhs.segmentLength {return false}
     if lhs.totalLength != rhs.totalLength {return false}
+    if lhs.audioURL != rhs.audioURL {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
