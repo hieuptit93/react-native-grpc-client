@@ -107,15 +107,13 @@ public class GrpcClient: RCTEventEmitter {
 
     @objc
     func close() -> Void {
-//        self.callback.sendEnd()
+        emitter.stopObserving();
     }
 
     @objc(send:)
-    func send(data: String) -> Void {
-        var voice = StreamingVoice_VoiceRequest.with { StreamingVoice_VoiceRequest in
-            print("Test")
-        }
-        let data:Data = Data(base64Encoded: data, options: NSData.Base64DecodingOptions(rawValue: 0))!
+    func send(text: String) -> Void {
+        var voice = StreamingVoice_VoiceRequest.with { StreamingVoice_VoiceRequest in}
+        let data:Data = Data(base64Encoded: text, options: NSData.Base64DecodingOptions(rawValue: 0))!
         //        let data: Data = Data(base64Encoded: textSample, options: NSData.Base64DecodingOptions(rawValue: 0))!
         voice.byteBuff = data
 
