@@ -107,7 +107,7 @@ public class GrpcClient: RCTEventEmitter {
 
     @objc
     func close() -> Void {
-//        self.callback.sendEnd()
+       self.callback.sendEnd(promise: nil)
     }
 
     @objc(send:)
