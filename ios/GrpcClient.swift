@@ -59,7 +59,7 @@ public class GrpcClient: RCTEventEmitter {
 
             let keepalive = ClientConnectionKeepalive(
                 interval: .seconds(15),
-                timeout: .seconds(30)
+                timeout: .seconds(10)
             )
 
             let mChannel = try GRPCChannelPool.with(
@@ -98,7 +98,7 @@ public class GrpcClient: RCTEventEmitter {
             self.callback.status.whenComplete { result in
                 self.onCompeleted()
             }
-            self.callback.response.whenFailure { error in
+            self.callback.status.whenFailure { error in
                 self.onError(message: error.localizedDescription)
             }
             onOpen()
@@ -138,3 +138,4 @@ public class GrpcClient: RCTEventEmitter {
         }
     }
 }
+
