@@ -116,6 +116,11 @@ public class GrpcClient: RCTEventEmitter {
        self.callback.sendEnd(promise: nil)
        _ = try! self.callback.status.wait()
     }
+  
+    @objc
+    func cancel() -> Void {
+        self.onError(message: "close")
+    }
 
     @objc(send:)
     func send(text: String) -> Void {
