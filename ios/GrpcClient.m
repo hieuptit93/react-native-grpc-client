@@ -10,4 +10,6 @@ RCT_EXTERN_METHOD(send:(NSString)data)
 
 RCT_EXTERN_METHOD(close)
 
+RCT_EXTERN_METHOD(cancel)
+
 @end
